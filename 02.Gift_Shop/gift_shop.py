@@ -8,14 +8,23 @@ def is_valid(id: str):
     if right == left: return False
     return True
 
-def find_invalid_id_sum(ranges: list):
+def is_valid_2(id: str):
+    length = len(id)
+    for chunk_size in range(1, length // 2 + 1):
+        chunks = [id[i:i + chunk_size] for i in range(0, length, chunk_size)]
+        if all([chunk == chunks[0] for chunk in chunks]): return False
+    return True
+
+
+def find_invalid_id_sum(ranges: list, valid_id_function):
     total = 0
     for current_range in ranges:
         start, end = current_range.split('-')
         for id in range(int(start), int(end) + 1):
-            if not is_valid(str(id)): total += id
+            if not valid_id_function(str(id)): total += id
     return total
 
 with open('./input.txt') as file:
    ranges = parse_input(file) 
-   print(find_invalid_id_sum(ranges))
+   print(find_invalid_id_sum(ranges, is_valid))
+   print(find_invalid_id_sum(ranges, is_valid_2))
