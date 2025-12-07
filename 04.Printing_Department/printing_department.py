@@ -23,11 +23,21 @@ def find_accessible_rolls():
                x_, y_ = x + dx, y + dy
                if is_in_bounds(x_, y_) and GRID[x_][y_] == '@':
                    adjacent_rolls += 1
-            if adjacent_rolls < 4: total += 1
+            if adjacent_rolls < 4: 
+                GRID[x][y] = '.'
+                total += 1
     return total
+
+def dig_into_accessible_rolls():
+    total = current_bunch = find_accessible_rolls()
+    while current_bunch > 0:
+        current_bunch = find_accessible_rolls()
+        total += current_bunch
+    return total 
 
 
 with open('./input.txt') as file:
     GRID, ROWS, COLUMNS = parse_input(file)
     # print(GRID)
-    print(find_accessible_rolls())
+    # print(find_accessible_rolls()) # Uncomment for part 1
+    print(dig_into_accessible_rolls())
