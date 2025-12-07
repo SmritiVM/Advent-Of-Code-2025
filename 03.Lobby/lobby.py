@@ -12,19 +12,25 @@ def find_largest_power(battery: str, start_index: int, end_index: int):
             largest_index = index
     return largest, largest_index
 
-def max_joltage(battery: str):
+def max_joltage(battery: str, limit: int):
     n = len(battery)
-    largest_power, largest_power_index = find_largest_power(battery, 0, n - 1) # finding the largest before the end
-    second_largest_power, _ = find_largest_power(battery, largest_power_index + 1, n) # find the largest after the first largest number. we don't need the index here
-    return int(largest_power + second_largest_power)
+    joltage = ''
+    start_index = 0
+    for offset in range(limit, 0, -1):
+        power, index = find_largest_power(battery, start_index, n - offset + 1)
+        joltage += power
+        start_index += (index + 1)
+        # print(power, index, end = ' ')
+    return int(joltage)
 
-def find_largest_joltage(batteries: list):
+def find_largest_joltage(batteries: list, limit: int):
     total = 0
     for battery in batteries:
-        # print(max_joltage(battery))
-        total += max_joltage(battery)
+        # print(max_joltage(battery, limit))
+        total += max_joltage(battery, limit)
     return total
         
 with open('./input.txt') as file:
     batteries = parse_input(file)
-    print(find_largest_joltage(batteries))
+    print(find_largest_joltage(batteries, limit=2))
+    print(find_largest_joltage(batteries, limit=12))
