@@ -42,8 +42,24 @@ def find_beam_split():
                 queue.append((x_, y_))
     return len(visited_splinters)
 
+dp = {}
+def find_timelines(x, y):
+    if (x, y) in dp:
+        return dp[(x, y)]
+    
+    if x >= ROWS: return 1
+
+    if MANIFOLD[x][y] == '^':
+        total = find_timelines(x + LEFT[0], y + LEFT[1]) + find_timelines(x + RIGHT[0], y + RIGHT[1])
+    else:
+        total = find_timelines(x + DOWN[0], y + DOWN[1])
+    
+    dp[(x, y)] = total
+    return(total)
+        
 with open('./input.txt') as file:
     MANIFOLD, ROWS, COLUMNS = parse_input(file)
     START = find_start()
     print(find_beam_split())
+    print(find_timelines(START[0], START[1]))
 
